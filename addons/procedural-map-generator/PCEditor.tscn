@@ -1,0 +1,607 @@
+[gd_scene load_steps=3 format=3 uid="uid://bogsyssb5b4fh"]
+
+[ext_resource type="Script" path="res://addons/procedural-map-generator/DropTileMapLabel.cs" id="1_idn27"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fo5yv"]
+font_size = 20
+font_color = Color(0.26682, 0.604518, 0.402463, 1)
+
+[node name="PcEditor" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Elements" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterUI" type="VBoxContainer" parent="Elements"]
+layout_direction = 1
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Elements/CenterUI"]
+layout_mode = 2
+
+[node name="CAButton" type="Button" parent="Elements/CenterUI/VBoxContainer"]
+layout_mode = 2
+text = "Cellular Automata"
+
+[node name="WFCButton" type="Button" parent="Elements/CenterUI/VBoxContainer"]
+layout_mode = 2
+text = "Wave Function Collapse"
+
+[node name="GEButton" type="Button" parent="Elements/CenterUI/VBoxContainer"]
+layout_mode = 2
+text = "Gram-Elites"
+
+[node name="DropData" type="VBoxContainer" parent="Elements"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Elements/DropData"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Elements/DropData/MarginContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="DropTileMapList" type="Label" parent="Elements/DropData/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+text = "Drop a TileMap here..."
+label_settings = SubResource("LabelSettings_fo5yv")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_idn27")
+
+[node name="CellularAutomata" type="VBoxContainer" parent="Elements"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Elements/CellularAutomata"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Elements/CellularAutomata/MarginContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Width" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Width"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Width"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Width"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 120.0
+
+[node name="Height" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Height"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Height"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Height"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 100.0
+
+[node name="BorderWidth" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/BorderWidth"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Border Width"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/BorderWidth"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 3.0
+
+[node name="Density" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Density"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Density"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Density"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 46.0
+
+[node name="Smoothing" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Smoothing"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Smoothing"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Smoothing"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+value = 7.0
+
+[node name="UseRandomSeed" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/UseRandomSeed"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use Random Seed"
+horizontal_alignment = 1
+
+[node name="CheckButton" type="CheckButton" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/UseRandomSeed"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 2
+button_pressed = true
+
+[node name="Seed" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Seed"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Seed"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Seed"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 1.0
+
+[node name="Wall" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="AtlasCoordX" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Wall"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Wall/AtlasCoordX"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "WallAtlasCoordX"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Wall/AtlasCoordX"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+value = 2.0
+
+[node name="AtlasCoordY" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Wall"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Wall/AtlasCoordY"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "WallAtlasCoordY"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/Wall/AtlasCoordY"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+value = 2.0
+
+[node name="NextToRoom" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="AtlasCoordX" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/NextToRoom"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/NextToRoom/AtlasCoordX"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "NextToRoomAtlasCoordX"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/NextToRoom/AtlasCoordX"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+
+[node name="AtlasCoordY" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/NextToRoom"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/NextToRoom/AtlasCoordY"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "NextToRoomAtlasCoordY"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/NextToRoom/AtlasCoordY"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+value = 2.0
+
+[node name="TileSetPath" type="HBoxContainer" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/TileSetPath"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tileset Path"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer/TileSetPath"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://addons/procedural-map-generator/Examples/CellularAutomata/basic_cellular_tileset.tres"
+
+[node name="Button" type="Button" parent="Elements/CellularAutomata/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Generate"
+
+[node name="WFC" type="VBoxContainer" parent="Elements"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Elements/WFC"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Elements/WFC/MarginContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Width" type="HBoxContainer" parent="Elements/WFC/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/WFC/MarginContainer/VBoxContainer/Width"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Width"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/WFC/MarginContainer/VBoxContainer/Width"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 50.0
+
+[node name="Height" type="HBoxContainer" parent="Elements/WFC/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/WFC/MarginContainer/VBoxContainer/Height"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Height"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/WFC/MarginContainer/VBoxContainer/Height"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 30.0
+
+[node name="RulaPath" type="HBoxContainer" parent="Elements/WFC/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/WFC/MarginContainer/VBoxContainer/RulaPath"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rule Path"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Elements/WFC/MarginContainer/VBoxContainer/RulaPath"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://addons/procedural-map-generator/Examples/Wfc/basic_rules.json"
+
+[node name="TileSetPath" type="HBoxContainer" parent="Elements/WFC/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/WFC/MarginContainer/VBoxContainer/TileSetPath"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tileset Path"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Elements/WFC/MarginContainer/VBoxContainer/TileSetPath"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://addons/procedural-map-generator/Examples/Wfc/basic_tileset.tres"
+
+[node name="Button" type="Button" parent="Elements/WFC/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+text = "Generate"
+
+[node name="GramElites" type="VBoxContainer" parent="Elements"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Elements/GramElites"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Elements/GramElites/MarginContainer"]
+layout_mode = 2
+
+[node name="PythonInterpreter" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/PythonInterpreter"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Python Interpreter"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Elements/GramElites/MarginContainer/VBoxContainer/PythonInterpreter"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "C:\\Users\\Sacceroni\\AppData\\Local\\Programs\\Python\\Python310\\python.exe"
+
+[node name="TileSetPath" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/TileSetPath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TileSet Path"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Elements/GramElites/MarginContainer/VBoxContainer/TileSetPath"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://addons/procedural-map-generator/Examples/GramElites/basic_gram_elites_tileset.tres"
+
+[node name="Seed" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/Seed"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Seed"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/GramElites/MarginContainer/VBoxContainer/Seed"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 1.0
+
+[node name="Height" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/Height"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Height"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/GramElites/MarginContainer/VBoxContainer/Height"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 80.0
+
+[node name="StartPopulationSize" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/StartPopulationSize"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Start Population Size"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/GramElites/MarginContainer/VBoxContainer/StartPopulationSize"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 20.0
+
+[node name="Iterations" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/Iterations"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Iterations"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/GramElites/MarginContainer/VBoxContainer/Iterations"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 120.0
+
+[node name="AtlasCoords" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AtlasCoordX" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer/AtlasCoords"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/AtlasCoords/AtlasCoordX"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AtlasCoordX"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/GramElites/MarginContainer/VBoxContainer/AtlasCoords/AtlasCoordX"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+value = 2.0
+
+[node name="AtlasCoordY" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer/AtlasCoords"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/AtlasCoords/AtlasCoordY"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AtlasCoordY"
+horizontal_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="Elements/GramElites/MarginContainer/VBoxContainer/AtlasCoords/AtlasCoordY"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000.0
+value = 2.0
+
+[node name="Button" type="Button" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Generate"
+
+[node name="MarginContainer" type="MarginContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer/MarginContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="DropTileMapList" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 0
+text = "Drop a TileMap here for learning..."
+label_settings = SubResource("LabelSettings_fo5yv")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("1_idn27")
+
+[node name="NameOfTheTilemap" type="HBoxContainer" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Elements/GramElites/MarginContainer/VBoxContainer/NameOfTheTilemap"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Name of the tilemap"
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="Elements/GramElites/MarginContainer/VBoxContainer/NameOfTheTilemap"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Save" type="Button" parent="Elements/GramElites/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Save tilemap to txt"

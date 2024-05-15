@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cufbdb3jkhq1f"]
+
+[ext_resource type="TileSet" uid="uid://doyljjenj0n1u" path="res://addons/procedural-map-generator/Examples/GramElites/basic_gram_elites_tileset.tres" id="1_ldw6o"]
+
+[node name="TestPlugin" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+position = Vector2(0, 5)
+tile_set = ExtResource("1_ldw6o")
+format = 2

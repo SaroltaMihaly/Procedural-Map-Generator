@@ -1,0 +1,13 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://bgy544t3gf14r"]
+
+[ext_resource type="Texture2D" uid="uid://nfmt8blgpqsr" path="res://addons/procedural-map-generator/Examples/Wfc/basic.png" id="1_32544"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i865u"]
+texture = ExtResource("1_32544")
+0:0/0 = 0
+1:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_i865u")
