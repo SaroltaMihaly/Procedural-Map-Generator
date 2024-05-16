@@ -6,4 +6,8 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>ProceduralMapGenerator</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="addons\procedural-map-generator\LICENSE.txt" />
+    <Content Include="addons\procedural-map-generator\README.md" />
+  </ItemGroup>
 </Project>
