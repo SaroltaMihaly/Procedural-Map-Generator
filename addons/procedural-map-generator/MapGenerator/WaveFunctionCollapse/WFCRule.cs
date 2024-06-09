@@ -8,7 +8,7 @@ using Godot.Collections;
 namespace PluginPCG.WaveFunctionCollapse;
 
 [Serializable]
-public partial class WFCRule{
+public class WFCRule{
     public int Frequency{ get; set; }
     public WFCOptions Options{ get; set; } = new();
     
@@ -70,12 +70,5 @@ public partial class WFCRule{
         }
 
         return adjacencyRules;
-    }
-}
-
-public static class Serialize{
-    public static string ToJSON(this List<WFCRule> self){
-        string json = JsonSerializer.Serialize(self, new JsonSerializerOptions{ WriteIndented = true });
-        return json;
     }
 }

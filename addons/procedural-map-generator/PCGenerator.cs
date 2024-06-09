@@ -205,7 +205,6 @@ public partial class PCGenerator : EditorPlugin
 			.Initialize(width, height, new Dictionary<string, object>
 			{
 				{"rulePath", rulesFilePath},
-				{"wrap", false}
 			})
 			.Build(_tileMap);
 		

@@ -29,9 +29,8 @@ public class WFCBuilder : IMapBuilder {
         _width = width;
         _height = height;
         _rulePath = (string)parameters["rulePath"];
-        _wrap = (bool)parameters["wrap"];
         
-        GD.Print("width: " + width + " height: " + height + " rulePath: " + _rulePath + " wrap: " + _wrap);
+        GD.Print("width: " + width + " height: " + height + " rulePath: " + _rulePath);
     }
 
     #endregion
@@ -49,13 +48,12 @@ public class WFCBuilder : IMapBuilder {
     private void GenerateGrid(){
         if (_grid.Busy) return;
         ClearTilemap();
-        _grid.TryCollapse(_wrap);
+        _grid.TryCollapse();
     }
     
     private void OnGenerationComplete(WFCResult result){
         if (!result.Success) return;
         StartPopulatingTilemap(result.Grid);
-        //WFCGrid.onComplete -= OnGenerationComplete;
     }
     
     private void StartPopulatingTilemap(WFCGrid _grid)

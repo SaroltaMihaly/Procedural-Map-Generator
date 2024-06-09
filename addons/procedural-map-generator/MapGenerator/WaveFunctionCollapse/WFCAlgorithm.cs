@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using Godot;
 using System.Collections.Generic;
@@ -8,88 +8,100 @@ using System.Diagnostics;
 using PluginPCG.WaveFunctionCollapse;
 
 namespace PluginPCG;
-public abstract class Delegates{
-    public delegate void OnComplete(WFCResult result);
-}
+public class WFCCell {
+    public int TileIndex { get; set; }
+    public bool isCollapsed { get; set; }
+    public bool[] Options { get; }
+    public WFCCoordinates.Coordinates Position { get; }
+    public double Entropy => CalculateEntropy();
+    
+    private readonly int[] _frequencies;
+    private int _sumOfPossibleFrequencies;
+    private readonly double _entropyNoise;
 
-public partial class WFCCell{
-    public int TileIndex{ get; private set; } = -1;
-    public bool Collapsed{ get; private set; }
-    public bool[] Options{ get; }
-    public WFCCoordinates.Coordinates Coordinates{ get; private set; }
-    private readonly int[] rawFrequencies;
-    private readonly double[] logFrequencies;
-    private int sumOfRawFrequencies;
-    private int sumOfPossibleFrequencies;
-    private double sumOfPossibleFrequencyLogFrequencies;
-    private readonly double entropyNoise;
-
-
-    public WFCCell(WFCCoordinates.Coordinates _coordinates, int[] _frequencies){
-        Coordinates = _coordinates;
-        rawFrequencies = _frequencies;
-        logFrequencies = new double[rawFrequencies.Length];
-        Options = new bool[rawFrequencies.Length];
-        Array.Fill(Options, true);
-        entropyNoise = WFCGrid.Random.NextDouble() * .0001;
-        PrecalculateFrequencies();
-    }
-}
-
-public partial class WFCCell{
-    private void PrecalculateFrequencies(){
-        for (int i = 0; i < rawFrequencies.Length; i++){
-            logFrequencies[i] = Math.Log2(rawFrequencies[i]);
-        }
-
-        sumOfRawFrequencies = rawFrequencies.Sum();
-        sumOfPossibleFrequencies = sumOfRawFrequencies;
-        for (int i = 0; i < rawFrequencies.Length; i++){
-            sumOfPossibleFrequencyLogFrequencies += Math.Log2(sumOfRawFrequencies) * Math.Log2(rawFrequencies[i]);
-        }
-    }
-
-    public void RemoveOption(int i){
-        Options[i] = false;
-        sumOfPossibleFrequencies -= rawFrequencies[i];
-        sumOfPossibleFrequencyLogFrequencies -= logFrequencies[i];
-    }
-
-    public double Entropy => Math.Log2(sumOfPossibleFrequencies) -
-        sumOfPossibleFrequencyLogFrequencies / sumOfPossibleFrequencies + entropyNoise;
-
-
-    private int WeightedRandomIndex(){
-        int pointer = 0;
-        int randomFromSumPossible = WFCGrid.Random.Next(0, sumOfPossibleFrequencies);
+    public WFCCell(WFCCoordinates.Coordinates position, int[] _frequencies) {
+        TileIndex = -1;
+        isCollapsed = false;
+        Position = position;
+        
+        this._frequencies = _frequencies;
+        Options = new bool[this._frequencies.Length];
+        
         for (int i = 0; i < Options.Length; i++){
-            if (!Options[i]) continue;
-            pointer += rawFrequencies[i];
-            if (pointer >= randomFromSumPossible){
-                return i;
+            Options[i] = true;
+        }
+        
+        _entropyNoise = randomEntropyNoise();
+        _sumOfPossibleFrequencies = _frequencies.Sum();
+    }
+
+    private double randomEntropyNoise()
+    {
+        var random = new Random();
+        return random.NextDouble() * 0.1;
+    }
+    
+    private double CalculateEntropy()
+    {
+        double possibleFrequencyLogFrequencies = 0;
+        for (int i = 0; i < Options.Length; i++) {
+            if (Options[i]) {
+                possibleFrequencyLogFrequencies += Math.Log2(_frequencies[i]) * _frequencies[i];
             }
         }
+        return Math.Log2(_sumOfPossibleFrequencies) - possibleFrequencyLogFrequencies / _sumOfPossibleFrequencies + _entropyNoise;
+    }
 
-        //If index returns -1 we know the collapse has failed.
+    public void RemoveOption(int i) {
+        Options[i] = false;
+        _sumOfPossibleFrequencies -= _frequencies[i];
+    }
+    
+    private int RandomFromSum(int _sum) {
+        var random = new Random();
+        return random.Next(0, _sum);
+    }
+
+    private int RandomIndex() {
+        
+        int pointer = 0;
+        int randomFromSum = RandomFromSum(_sumOfPossibleFrequencies);
+        
+        for (int i = 0; i < Options.Length; i++) {
+            if (Options[i])
+            {
+                pointer += _frequencies[i];
+                if (pointer >= randomFromSum) {
+                    return i;
+                }
+            }
+        }
+        
         return -1;
     }
 
-
-    public int Collapse(){
-        int weightedRandomIndex = WeightedRandomIndex();
-        TileIndex = weightedRandomIndex;
-        Collapsed = true;
-        for (int i = 0; i < Options.Length; i++){
-            Options[i] = i == TileIndex;
+    public int Collapse() {
+        
+        isCollapsed = true;
+        
+        int randomIndex = RandomIndex();
+        TileIndex = randomIndex;
+        
+        for (int i = 0; i < Options.Length; i++) {
+            if(i == TileIndex) {
+                Options[i] = true;
+            }
+            else {
+                Options[i] = false;
+            }
         }
 
-        return weightedRandomIndex;
+        return randomIndex;
     }
 }
 
 sealed partial class WFCGrid{
-    #region VARIABLES
-
+    
     public bool Busy;
     public readonly Queue<WFCCoordinates.Coordinates> AnimationCoordinates = new();
 
@@ -102,10 +114,9 @@ sealed partial class WFCGrid{
     private readonly int[,,] adjacencyRules;
     private readonly Stack<WFCCoordinates.RemovalUpdate> removalUpdates;
     private readonly bool suppressNotifications;
-
-    #endregion
-
-    #region DIMENSIONS
+    
+    private int width;
+    private int height;
 
     public int Width{
         get{
@@ -116,9 +127,7 @@ sealed partial class WFCGrid{
             return width;
         }
     }
-
-    private int width;
-
+    
     public int Height{
         get{
             if (height == 0){
@@ -128,23 +137,10 @@ sealed partial class WFCGrid{
             return height;
         }
     }
-
-    private int height;
-
-    #endregion
-
-    #region RANDOM NUMBER GENERATOR
-
-    public static Random Random => pseudoRandom ??= new Random();
+    
     private static Random pseudoRandom;
 
-    #endregion
-
-    #region EVENTS
-
     public Delegates.OnComplete onComplete;
-
-    #endregion
 
     private bool IsInBounds(WFCCoordinates.Coordinates c){
         return c.X >= 0 && c.X < Width && c.Y >= 0 && c.Y < Height;
@@ -200,7 +196,7 @@ public partial class WFCGrid{
     private WFCCoordinates.EntropyCoordinates Observe(){
         while (!entropyHeap.IsEmpty){
             WFCCoordinates.EntropyCoordinates coords = entropyHeap.Pop();
-            if (!cells[coords.Coordinates.X, coords.Coordinates.Y].Collapsed) return coords;
+            if (!cells[coords.Coordinates.X, coords.Coordinates.Y].isCollapsed) return coords;
         }
 
         return WFCCoordinates.EntropyCoordinates.Invalid;
@@ -216,7 +212,7 @@ public partial class WFCGrid{
         remainingUncollapsedCells--;
     }
 
-    private void Propagate(bool _wrap = true){
+    private void Propagate(){
         while (removalUpdates.Count > 0){
             WFCCoordinates.RemovalUpdate update = removalUpdates.Pop();
             if (update.TileIndex == -1){
@@ -227,15 +223,12 @@ public partial class WFCGrid{
             WFCCoordinates.Coordinates[] cardinals = WFCCoordinates.Coordinates.Cardinals;
             for (int d = 0; d < adjacencyRules.GetLength(1); d++){
                 WFCCoordinates.Coordinates current = cardinals[d] + update.Coordinates;
-                if (_wrap){
-                    current = current.Wrap(Width, Height);
-                }
-                else if (!IsInBounds(current)){
+                if (!IsInBounds(current)){
                     continue;
                 }
 
                 WFCCell currentCell = cells[current.X, current.Y];
-                if (currentCell.Collapsed) continue;
+                if (currentCell.isCollapsed) continue;
                 for (int o = 0; o < adjacencyRules.GetLength(2); o++){
                     if (adjacencyRules[update.TileIndex, d, o] == 0 && currentCell.Options[o]){
                         currentCell.RemoveOption(o);
@@ -243,29 +236,36 @@ public partial class WFCGrid{
                 }
 
                 entropyHeap.Push(new WFCCoordinates.EntropyCoordinates(){
-                    Coordinates = currentCell.Coordinates,
+                    Coordinates = currentCell.Position,
                     Entropy = currentCell.Entropy
                 });
             }
         }
     }
+    
+    public WFCCell GetRandomCell() {
+        var random = new Random();
+        int x = random.Next(0, cells.GetLength(0));
+        int y = random.Next(0, cells.GetLength(1));
+        return cells[x, y];
+    }
 
-    public void TryCollapse(bool _wrap = true, int _maxAttempts = 1000){
+    public void TryCollapse(int _maxAttempts = 1000){
         Reset(true);
         Busy = true;
         Stopwatch timer = Stopwatch.StartNew();
         for (int i = 0; i < _maxAttempts; i++){
             currentAttempt++;
-            WFCCell cell = cells.Random();
+            WFCCell cell = GetRandomCell();
             entropyHeap.Push(new WFCCoordinates.EntropyCoordinates(){
-                Coordinates = cell.Coordinates,
+                Coordinates = cell.Position,
                 Entropy = cell.Entropy
             });
 
             while (remainingUncollapsedCells > 0 && validCollapse){
                 WFCCoordinates.EntropyCoordinates e = Observe();
                 Collapse(e.Coordinates);
-                Propagate(_wrap);
+                Propagate();
             }
 
             if (!validCollapse && i < _maxAttempts - 1){
@@ -289,7 +289,6 @@ public partial class WFCGrid{
 }
 
 public partial class WFCGrid : ICollection{
-    #region ICOLLECTION IMPLEMENTATION
     
     public WFCCell this[int x, int y]{
         get => cells[x, y];
@@ -317,8 +316,7 @@ public partial class WFCGrid : ICollection{
 
     object ICollection.SyncRoot => this;
     int ICollection.Count => cells.Length;
-
-    #endregion
+    
 }
 
 public class CellEnumerator : IEnumerator{
@@ -373,8 +371,6 @@ public class EntropyHeap{
 
     public bool IsEmpty => size == 0;
 
-    public WFCCoordinates.EntropyCoordinates Peek() => size == 0 ? throw new IndexOutOfRangeException() : coords[0];
-
     private void Swap(int a, int b) => (coords[a], coords[b]) = (coords[b], coords[a]);
 
     public WFCCoordinates.EntropyCoordinates Pop(){
@@ -420,31 +416,8 @@ public class EntropyHeap{
     }
 }
 
-public static partial class Extensions{
-    public static int Wrap(this int n, int maxValue, int minValue = 0){
-        int remainder = n % maxValue;
-        return remainder < minValue ? maxValue + remainder : remainder;
-    }
-
-    public static WFCCoordinates.Coordinates Wrap(this WFCCoordinates.Coordinates c, int xMax, int yMax, int xMin = 0, int yMin = 0){
-        c.X = c.X.Wrap(xMax, xMin);
-        c.Y = c.Y.Wrap(yMax, yMin);
-        return c;
-    }
-
-    public static Vector2I Wrap(this Vector2I v, int xMax, int yMax, int xMin = 0, int yMin = 0){
-        v.X = v.X.Wrap(xMax, xMin);
-        v.Y = v.Y.Wrap(yMax, yMin);
-        return v;
-    }
-
-    public static bool InBounds(this Vector2I v){
-        return v is{ X: >= 0, Y: >= 0 };
-    }
-
-    public static WFCCell Random(this WFCCell[,] cells){
-        return cells[WFCGrid.Random.Next(0, cells.GetLength(0)), WFCGrid.Random.Next(0, cells.GetLength(1))];
-    }
+public abstract class Delegates{
+    public delegate void OnComplete(WFCResult result);
 }
 
 public struct WFCResult{
