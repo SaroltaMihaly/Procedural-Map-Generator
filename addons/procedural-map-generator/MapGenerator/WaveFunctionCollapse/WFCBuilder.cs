@@ -62,7 +62,7 @@ namespace PluginPCG.WaveFunctionCollapse
 
         private void PopulateTilemap(WFCGrid _grid)
         {
-            foreach (var c in _grid.AnimationCoordinates)
+            foreach (var c in _grid.GridCoordinates)
             {
                 SetNextCell(c.ToVector2I);
             }
