@@ -13,7 +13,6 @@ public class CellularAutomataBuilder : IMapBuilder
     private int _borderWidth;
     private int _density;
     private int _smoothing;
-    private int _minRegionSize;
     private int _seed;
     private bool _useRandomSeed;
     private Vector2I _wallTile;
@@ -37,7 +36,6 @@ public class CellularAutomataBuilder : IMapBuilder
         _borderWidth = Convert.ToInt32(parameters["borderWidth"]);
         _density = Convert.ToInt32(parameters["density"]);
         _smoothing = Convert.ToInt32(parameters["smoothing"]);
-        // _minRegionSize = Convert.ToInt32(parameters["minRegionSize"]);
         _useRandomSeed = Convert.ToBoolean(parameters["useRandomSeed"]);
         _seed = Convert.ToInt32(parameters["seed"]);
 
@@ -178,114 +176,6 @@ public class CellularAutomataBuilder : IMapBuilder
     private bool IsInBounds(int x, int y)
     {
         return x >= 0 && x < _width && y >= 0 && y < _height;
-    }
-    
-    /**
-     * Get the region of a tile
-     * It iterates over the tiles, checks if the tile is in bounds, if it is, it checks if the tile is a same type as the original tile,
-     * if it is, it adds it to the region and enqueues the neighbours
-     * After that, it returns the region
-     *
-     * @param x The x coordinate of the tile
-     * @param y The y coordinate of the tile
-     */
-    private List<Vector2I> GetRegion(int x, int y)
-    {
-        List<Vector2I> temp = new List<Vector2I>();
-        int[,] flags = new int[_width, _height];
-        int tileType = _map[x, y];
-        Queue<Vector2I> queue = new Queue<Vector2I>();
-        queue.Enqueue(new Vector2I(x, y));
-        flags[x, y] = 1;
-        
-        // BFS to get the region
-        while (queue.Count > 0)
-        {
-            Vector2I current = queue.Dequeue();
-            temp.Add(current);
-            for (int tileX = current.X - 1; tileX <= current.X + 1; tileX++)
-            {
-                for (int tileY = current.Y - 1; tileY <= current.Y + 1; tileY++)
-                {
-                    if (!IsInBounds(tileX, tileY))
-                    {
-                        continue;
-                    }
-                    if (current.X != tileX && current.Y != tileY)
-                    {
-                        continue;
-                    }
-                    if (flags[tileX, tileY] != 0 || _map[tileX, tileY] != tileType)
-                    {
-                        continue;
-                    }
-                    flags[tileX, tileY] = 1;
-                    queue.Enqueue(new Vector2I(tileX, tileY));
-                }
-            }
-        }
-
-        return temp;
-    }
-    
-    /**
-     * Get the regions of the map
-     * It iterates over the tiles, checks if the tile is of the specified type, if it is,
-     * it gets the region of the tile and adds it to the list of regions
-     * After that, it returns the list of regions
-     * 
-     * @param tileType The type of the tile. 0 for room, 1 for wall
-     */
-    private List<List<Vector2I>> GetRegions(int tileType)
-    {
-        List<List<Vector2I>> temp = new List<List<Vector2I>>();
-        int[,] flags = new int[_width, _height];
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                if (flags[x, y] != 0 || _map[x, y] != tileType)
-                {
-                    continue;
-                }
-                List<Vector2I> region = GetRegion(x, y);
-                temp.Add(region);
-                foreach (Vector2I tile in region)
-                {
-                    flags[tile.X, tile.Y] = 1;
-                }
-            }
-        }
-        return temp;
-    }
-
-    /**
-     * Cleans up the regions of the map
-     * It gets the regions of the map, checks if the region is smaller than the minimum region size,
-     * if it is, it sets the tiles of the region to the opposite type
-     */
-    private void CleanupRegions()
-    {
-        List<List<Vector2I>> wallRegions = GetRegions(1);
-        List<List<Vector2I>> roomRegions = GetRegions(0);
-
-        foreach (List<Vector2I> region in wallRegions)
-        {
-            if (region.Count >= _minRegionSize) continue;
-            foreach (Vector2I tile in region)
-            {
-                _map[tile.X, tile.Y] = 0;
-            }
-        }
-
-        foreach (List<Vector2I> region in roomRegions)
-        {
-            if (region.Count >= _minRegionSize) continue;
-            foreach (Vector2I tile in region)
-            {
-                _map[tile.X, tile.Y] = 1;
-            }
-        }
     }
     
     /**
